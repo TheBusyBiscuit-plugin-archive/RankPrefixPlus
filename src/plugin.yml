@@ -1,0 +1,21 @@
+name: RankPrefixPlus
+version: 1.7.2
+author: mrCookieSlime
+website: http://TheBusyBiscuit.github.io
+
+main: me.mrCookieSlime.RankPrefixPlus.main
+
+softdepend: [Vault, Factions, PrisonRankup, ChatTitles, CS-CoreLib, Towny, uSkyblock, EZPrestige, Clickssentials, Slimefun]
+
+permissions:
+  RankPrefixPlus.chatcolors:
+    default: op
+    description: Allows you to use Chat Colors
+  RankPrefixPlus.reload:
+    default: op
+    description: Allows you to reload the Config
+
+commands:
+  rpreload:
+    usage: /rpreload
+    description: Reloads the RankPrefix+ Config

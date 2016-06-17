@@ -1,0 +1,59 @@
+options:
+  auto-update: true
+  use-scoreboard-teams: true
+  update-delay-in-ticks: 100
+notifications:
+  name-in-chat:
+    highlight: true
+    sound:
+      enabled: true
+      sound: BLOCK_NOTE_PLING
+variables:
+  afk:
+    afk: '&eAFK'
+    not-afk: ''
+chat:
+  layout: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
+  per-rank-layout: false
+  use-layout: true
+  force-lower-case: false
+  world-specific-layout:
+    enabled: false
+    world: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
+    world_nether: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
+    world_the_end: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
+  sound:
+    enabled: true
+    sound: UI_BUTTON_CLICK
+  local:
+    enabled: false
+    per-world: false
+    radius: -1
+ranks:
+  default:
+    prefix: '&7[&eMember&7] '
+    suffix: ''
+    scoreboard:
+      enabled: true
+      prefix: '&7'
+      suffix: ''
+      tab-priority: 1
+    required-permission: ''
+    message-color: '&7'
+    bypass-OP: false
+    chat-layout: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
+  admin:
+    prefix: '&7[&cAdmin&7] '
+    suffix: ''
+    scoreboard:
+      enabled: true
+      prefix: '&c'
+      suffix: ''
+      tab-priority: 10
+    required-permission: 'RankPrefixPlus.admin'
+    message-color: '&7'
+    bypass-OP: true
+    chat-layout: '&7{PREFIX}&4{PLAYER}{SUFFIX}: &c{MESSAGE}'
+  order:
+  - admin
+  - default
