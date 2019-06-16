@@ -27,6 +27,7 @@ public class Rank {
 		this.bypassOP = RankPrefixPlus.cfg.getBoolean("ranks." + name + ".bypass-OP");
 		this.layout = RankPrefixPlus.cfg.getString("ranks." + name + ".chat-layout");
 		int index = chars.length - RankPrefixPlus.cfg.getInt("ranks." + name + ".scoreboard.tab-priority");
+		
 		if (index < 0 || index > chars.length) {
 			this.tabweight = "A";
 			System.err.println("[RankPrefix+] Rank \"" + name + "\" has a TAB Priority higher than " + chars.length + " or smaller than 0");
