@@ -28,7 +28,9 @@ public class RankPrefixPlus extends JavaPlugin {
 	public void onEnable() {
 		cfg = new Config(this);
 		new Metrics(this);
-		new BukkitUpdater(this, getFile(), 84619);
+		
+		BukkitUpdater updater = new BukkitUpdater(this, getFile(), 84619);
+		if (cfg.getBoolean("options.auto-update")) updater.start();
 		
 		new ChatListener(this);
 		
