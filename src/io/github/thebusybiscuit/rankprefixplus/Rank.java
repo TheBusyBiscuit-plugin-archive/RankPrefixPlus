@@ -1,4 +1,4 @@
-package me.mrCookieSlime.RankPrefixPlus;
+package io.github.thebusybiscuit.rankprefixplus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,25 +8,25 @@ public class Rank {
 	public static Map<String, Rank> ranks = new HashMap<String, Rank>();
 	private static char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 	
-	String prefix;
-	String suffix;
-	boolean scoreboard, bypassOP;
-	String scoreboard_prefix;
-	String scoreboard_suffix;
-	String name, layout, color;
-	String tabweight;
+	protected String prefix;
+	protected String suffix;
+	protected boolean scoreboard, bypassOP;
+	protected String scoreboard_prefix;
+	protected String scoreboard_suffix;
+	protected String name, layout, color;
+	protected String tabweight;
 	
 	public Rank(String name) {
 		this.name = name;
-		this.prefix = main.cfg.getString("ranks." + name + ".prefix");
-		this.suffix = main.cfg.getString("ranks." + name + ".suffix");
-		this.scoreboard = main.cfg.getBoolean("ranks." + name + ".scoreboard.enabled");
-		this.scoreboard_prefix = main.cfg.getString("ranks." + name + ".scoreboard.prefix");
-		this.scoreboard_suffix = main.cfg.getString("ranks." + name + ".scoreboard.suffix");
-		this.color = main.cfg.getString("ranks." + name + ".message-color");
-		this.bypassOP = main.cfg.getBoolean("ranks." + name + ".bypass-OP");
-		this.layout = main.cfg.getString("ranks." + name + ".chat-layout");
-		int index = chars.length - main.cfg.getInt("ranks." + name + ".scoreboard.tab-priority");
+		this.prefix = RankPrefixPlus.cfg.getString("ranks." + name + ".prefix");
+		this.suffix = RankPrefixPlus.cfg.getString("ranks." + name + ".suffix");
+		this.scoreboard = RankPrefixPlus.cfg.getBoolean("ranks." + name + ".scoreboard.enabled");
+		this.scoreboard_prefix = RankPrefixPlus.cfg.getString("ranks." + name + ".scoreboard.prefix");
+		this.scoreboard_suffix = RankPrefixPlus.cfg.getString("ranks." + name + ".scoreboard.suffix");
+		this.color = RankPrefixPlus.cfg.getString("ranks." + name + ".message-color");
+		this.bypassOP = RankPrefixPlus.cfg.getBoolean("ranks." + name + ".bypass-OP");
+		this.layout = RankPrefixPlus.cfg.getString("ranks." + name + ".chat-layout");
+		int index = chars.length - RankPrefixPlus.cfg.getInt("ranks." + name + ".scoreboard.tab-priority");
 		if (index < 0 || index > chars.length) {
 			this.tabweight = "A";
 			System.err.println("[RankPrefix+] Rank \"" + name + "\" has a TAB Priority higher than " + chars.length + " or smaller than 0");

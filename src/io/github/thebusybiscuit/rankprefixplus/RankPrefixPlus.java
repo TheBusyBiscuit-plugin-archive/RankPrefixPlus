@@ -1,4 +1,4 @@
-package me.mrCookieSlime.RankPrefixPlus;
+package io.github.thebusybiscuit.rankprefixplus;
 
 import java.util.Iterator;
 
@@ -10,78 +10,45 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import me.mrCookieSlime.CSCoreLibPlugin.PluginUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.CSCoreLibSetup.CSCoreLibLoader;
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
+import io.github.thebusybiscuit.cscorelib2.config.Config;
+import io.github.thebusybiscuit.cscorelib2.updater.BukkitUpdater;
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.metrics.bukkit.Metrics;
 
-public class main extends JavaPlugin {
+public class RankPrefixPlus extends JavaPlugin {
 	
 	public static Config cfg;
 	
-	public static Economy economy = null;
-	public static Chat chat = null;
-	
 	@Override
 	public void onEnable() {
-		CSCoreLibLoader loader = new CSCoreLibLoader(this);
-		if (loader.load()) {
-			PluginUtils utils = new PluginUtils(this);
-			utils.setupConfig();
-			utils.setupMetrics();
-			utils.setupUpdater(84619, getFile());
-			
-			new ChatListener(this);
-			
-			cfg = utils.getConfig();
-			
-			if (getServer().getPluginManager().isPluginEnabled("Vault")) {
-				setupEconomy();
-				setupChat();
+		cfg = new Config(this);
+		new Metrics(this);
+		new BukkitUpdater(this, getFile(), 84619);
+		
+		new ChatListener(this);
+		
+		reloadSettings();
+		
+		if (!RankPrefixPlus.cfg.getBoolean("options.use-scoreboard-teams"))  return;
+		
+		getServer().getScheduler().runTaskTimer(this, () -> {
+			for (Player p: Bukkit.getOnlinePlayers()) {
+				updateScoreboard(p);
 			}
-			
-			reloadSettings();
-			
-			if (!main.cfg.getBoolean("options.use-scoreboard-teams"))  return;
-			
-			getServer().getScheduler().runTaskTimer(this, new Runnable() {
-				
-				@Override
-				public void run() {
-					for (Player p: Bukkit.getOnlinePlayers()) {
-						updateScoreboard(p);
-					}
-				}
-			}, 0L, cfg.getInt("options.update-delay-in-ticks"));
-		}
+		}, 0L, cfg.getInt("options.update-delay-in-ticks"));
 	}
 	
 	public void onDisable() {
 		cfg = null;
-		economy = null;
-		chat = null;
 		Rank.ranks = null;
 	}
 	
 	private void reloadSettings() {
-		
-		ChatListener.isChatTitlesInstalled = getServer().getPluginManager().isPluginEnabled("ChatTitles");
-		ChatListener.isClickssentialsInstalled = getServer().getPluginManager().isPluginEnabled("Clickssentials");
-		ChatListener.isEssentialsInstalled = getServer().getPluginManager().isPluginEnabled("Essentials");
-		ChatListener.isFactionsInstalled = getServer().getPluginManager().isPluginEnabled("Factions");
-		ChatListener.isPrisonRankupInstalled = getServer().getPluginManager().isPluginEnabled("PrisonRankup");
-		ChatListener.isSlimefunInstalled = getServer().getPluginManager().isPluginEnabled("Slimefun");
-		ChatListener.isTownyInstalled = getServer().getPluginManager().isPluginEnabled("Towny");
-		ChatListener.isuSkyBlockInstalled = getServer().getPluginManager().isPluginEnabled("uSkyBlock");
-		ChatListener.isVaultInstalled = getServer().getPluginManager().isPluginEnabled("Vault");
-		
 		Rank.ranks.clear();
 		cfg.reload();
 		
@@ -109,28 +76,13 @@ public class main extends JavaPlugin {
 		return true;
 	}
 	
-	private boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-	    if (economyProvider != null) {
-	      economy = (Economy)economyProvider.getProvider();
-	    }
-
-	    return economy != null;
-	}
-	
-	private boolean setupChat() {
-        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null) {
-            chat = chatProvider.getProvider();
-        }
-
-        return (chat != null);
-    }
-	
 	public static Rank getRank(Player p) {
 		for (String rank: cfg.getStringList("ranks.order")) {
 			String permission = cfg.getString("ranks." + rank + ".required-permission");
-			if (permission.equalsIgnoreCase("")) return Rank.get(rank);
+			
+			if (permission.equalsIgnoreCase("")) {
+				return Rank.get(rank);
+			}
 			else {
 				Rank group = Rank.get(rank);
 				if (group.canBypassOP()) {
@@ -168,10 +120,9 @@ public class main extends JavaPlugin {
 	}
 
 	public static String getVariable(String string) {
-		return ChatColor.translateAlternateColorCodes('&', main.cfg.getString("variables." + string));
+		return ChatColor.translateAlternateColorCodes('&', RankPrefixPlus.cfg.getString("variables." + string));
 	}
 	
-	@SuppressWarnings("deprecation")
 	private static void loadScoreboardTeam(Scoreboard scoreboard, Player p) {
 		Rank group = getRank(p);
 		if (group.hasScoreboard()) {
@@ -180,12 +131,18 @@ public class main extends JavaPlugin {
 			
 			if (team == null) {
 				team = scoreboard.registerNewTeam(id);
-				if (!group.getSBPrefix().equalsIgnoreCase("")) team.setPrefix(ChatColor.translateAlternateColorCodes('&', ChatListener.applyVariables(p, group.getSBPrefix())));
-				if (!group.getSBSuffix().equalsIgnoreCase("")) team.setSuffix(ChatColor.translateAlternateColorCodes('&', ChatListener.applyVariables(p, group.getSBSuffix())));
+				
+				if (!group.getSBPrefix().equalsIgnoreCase("")) {
+					team.setPrefix(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(p, group.getSBPrefix())));
+				}
+				
+				if (!group.getSBSuffix().equalsIgnoreCase("")) {
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(p, group.getSBSuffix())));
+				}
 				
 			}
 			
-			team.addPlayer(p);
+			team.addEntry(p.getName());
 		}
 	}
 	

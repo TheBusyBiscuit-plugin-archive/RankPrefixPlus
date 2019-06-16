@@ -1,11 +1,10 @@
 name: RankPrefixPlus
-version: 1.7.2
-author: mrCookieSlime
+version: ${project.version}
+author: THeBusyBiscuit
 website: http://TheBusyBiscuit.github.io
 
-main: me.mrCookieSlime.RankPrefixPlus.main
-
-softdepend: [Vault, Factions, PrisonRankup, ChatTitles, CS-CoreLib, Towny, uSkyblock, EZPrestige, Clickssentials, Slimefun]
+main: io.github.thebusybiscuit.rankprefixplus.RankPrefixPlus
+api-version: 1.13
 
 permissions:
   RankPrefixPlus.chatcolors:

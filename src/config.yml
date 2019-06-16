@@ -2,16 +2,14 @@ options:
   auto-update: true
   use-scoreboard-teams: true
   update-delay-in-ticks: 100
+  
 notifications:
   name-in-chat:
     highlight: true
     sound:
       enabled: true
-      sound: BLOCK_NOTE_PLING
-variables:
-  afk:
-    afk: '&eAFK'
-    not-afk: ''
+      sound: BLOCK_NOTE_BLOCK_PLING
+      
 chat:
   layout: '&7{PREFIX}{PLAYER}{SUFFIX}: {MESSAGE}'
   per-rank-layout: false
@@ -29,6 +27,7 @@ chat:
     enabled: false
     per-world: false
     radius: -1
+
 ranks:
   default:
     prefix: '&7[&eMember&7] '
