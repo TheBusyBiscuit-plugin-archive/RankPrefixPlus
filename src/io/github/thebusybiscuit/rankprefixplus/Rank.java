@@ -1,55 +1,76 @@
 package io.github.thebusybiscuit.rankprefixplus;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import lombok.Getter;
 
 public class Rank {
 	
-	public static Map<String, Rank> ranks = new HashMap<String, Rank>();
-	private static char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
-	
+	private static final char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+
+	protected boolean scoreboard;
+	protected boolean bypassOP;
+
+	@Getter
 	protected String prefix;
+
+	@Getter
 	protected String suffix;
-	protected boolean scoreboard, bypassOP;
-	protected String scoreboard_prefix;
-	protected String scoreboard_suffix;
-	protected String name, layout, color;
-	protected String tabweight;
+	
+	@Getter
+	protected String scoreboardPrefix;
+	
+	@Getter
+	protected String scoreboardSuffix;
+	
+	@Getter
+	protected String name;
+	
+	@Getter
+	protected String chatFormat;
+	
+	@Getter
+	protected String chatColor;
+	
+	@Getter
+	protected String scoreboardWeight;
 	
 	public Rank(String name) {
+		String path = "ranks." + name;
+		
 		this.name = name;
-		this.prefix = RankPrefixPlus.cfg.getString("ranks." + name + ".prefix");
-		this.suffix = RankPrefixPlus.cfg.getString("ranks." + name + ".suffix");
-		this.scoreboard = RankPrefixPlus.cfg.getBoolean("ranks." + name + ".scoreboard.enabled");
-		this.scoreboard_prefix = RankPrefixPlus.cfg.getString("ranks." + name + ".scoreboard.prefix");
-		this.scoreboard_suffix = RankPrefixPlus.cfg.getString("ranks." + name + ".scoreboard.suffix");
-		this.color = RankPrefixPlus.cfg.getString("ranks." + name + ".message-color");
-		this.bypassOP = RankPrefixPlus.cfg.getBoolean("ranks." + name + ".bypass-OP");
-		this.layout = RankPrefixPlus.cfg.getString("ranks." + name + ".chat-layout");
-		int index = chars.length - RankPrefixPlus.cfg.getInt("ranks." + name + ".scoreboard.tab-priority");
+		this.prefix = RankPrefixPlus.getInstance().getCfg().getString(path + ".prefix");
+		this.suffix = RankPrefixPlus.getInstance().getCfg().getString(path + ".suffix");
+		this.scoreboard = RankPrefixPlus.getInstance().getCfg().getBoolean(path + ".scoreboard.enabled");
+		this.scoreboardPrefix = RankPrefixPlus.getInstance().getCfg().getString(path + ".scoreboard.prefix");
+		this.scoreboardSuffix = RankPrefixPlus.getInstance().getCfg().getString(path + ".scoreboard.suffix");
+		this.chatColor = RankPrefixPlus.getInstance().getCfg().getString(path + ".message-color");
+		this.bypassOP = RankPrefixPlus.getInstance().getCfg().getBoolean(path + ".bypass-OP");
+		this.chatFormat = RankPrefixPlus.getInstance().getCfg().getString(path + ".chat-layout");
+		int index = chars.length - RankPrefixPlus.getInstance().getCfg().getInt(path + ".scoreboard.tab-priority");
 		
 		if (index < 0 || index > chars.length) {
-			this.tabweight = "A";
+			this.scoreboardWeight = "A";
 			System.err.println("[RankPrefix+] Rank \"" + name + "\" has a TAB Priority higher than " + chars.length + " or smaller than 0");
 			System.out.println("This is not allowed and must be immediately fixed in the config.yml!");
 		}
-		else this.tabweight = String.valueOf(chars[index]);
+		else {
+			this.scoreboardWeight = String.valueOf(chars[index]);
+		}
 		
-		ranks.put(name, this);
+		RankPrefixPlus.getInstance().getRanks().put(name, this);
 	}
 	
-	public String getName() 		{		return name;				}
-	public String getPrefix() 		{		return prefix;				}
-	public String getSuffix() 		{		return suffix;				}
-	public boolean hasScoreboard() 	{		return scoreboard;			}
-	public String getSBPrefix() 	{		return scoreboard_prefix;	}
-	public String getSBSuffix() 	{		return scoreboard_suffix;	}
-	public String getChatColor() 	{		return color;				}
-	public boolean canBypassOP() 	{		return bypassOP;			}
-	public String getChatFormat() 	{		return layout;				}
-	public String getTABWeight() 	{		return tabweight;			}
+	public boolean hasScoreboard() {		
+		return scoreboard;
+	}
+	
+	public boolean canBypassOP() {
+		return bypassOP;
+	}
 
 	public static Rank get(String rank) {
+		Map<String, Rank> ranks = RankPrefixPlus.getInstance().getRanks();
 		return ranks.containsKey(rank) ? ranks.get(rank): new Rank(rank);
 	}
 	
