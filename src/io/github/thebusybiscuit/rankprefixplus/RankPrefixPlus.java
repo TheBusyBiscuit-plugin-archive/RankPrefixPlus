@@ -37,6 +37,8 @@ public class RankPrefixPlus extends JavaPlugin {
 	@Getter
 	private Map<String, Rank> ranks = new HashMap<>();
 	
+	private boolean isPlaceholderAPIloaded = false;
+	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -62,6 +64,8 @@ public class RankPrefixPlus extends JavaPlugin {
 		
 		new ChatListener(this);
 		reloadSettings();
+		
+		isPlaceholderAPIloaded = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
 		
 		if (cfg.getBoolean("options.use-scoreboard-teams")) {
 			getServer().getScheduler().runTaskTimer(this, () -> {
@@ -162,11 +166,11 @@ public class RankPrefixPlus extends JavaPlugin {
 				team = scoreboard.registerNewTeam(id);
 				
 				if (!group.getScoreboardPrefix().equalsIgnoreCase("")) {
-					team.setPrefix(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(p, group.getScoreboardPrefix())));
+					team.setPrefix(ChatColor.translateAlternateColorCodes('&', applyPlaceholders(p, group.getScoreboardPrefix())));
 				}
 				
 				if (!group.getScoreboardSuffix().equalsIgnoreCase("")) {
-					team.setSuffix(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(p, group.getScoreboardSuffix())));
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', applyPlaceholders(p, group.getScoreboardSuffix())));
 				}
 				
 			}
@@ -187,6 +191,14 @@ public class RankPrefixPlus extends JavaPlugin {
             final String unicode = text.substring(text.indexOf('[') + 10, text.indexOf(']'));
             text = text.replace("[unicode: " + unicode + "]", String.valueOf((char)Integer.parseInt(unicode, 16)));
         }
+		
+		return text;
+	}
+
+	public String applyPlaceholders(Player p, String text) {
+		if (isPlaceholderAPIloaded) {
+			text = PlaceholderAPI.setPlaceholders(p, text);
+		}
 		
 		return text;
 	}

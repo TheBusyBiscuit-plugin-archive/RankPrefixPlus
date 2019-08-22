@@ -11,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-
 public class ChatListener implements Listener {
 	
 	private RankPrefixPlus plugin;
@@ -43,7 +41,7 @@ public class ChatListener implements Listener {
 			
 			format = plugin.replaceUnicodes(format);
 			
-			e.setFormat(ChatColor.translateAlternateColorCodes('&', PlaceholderAPI.setPlaceholders(e.getPlayer(), format)));
+			e.setFormat(ChatColor.translateAlternateColorCodes('&', plugin.applyPlaceholders(e.getPlayer(), format)));
 			message = ChatColor.translateAlternateColorCodes('&', chatcolor) + message;
 		}
 		

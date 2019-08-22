@@ -3,6 +3,8 @@ version: ${project.version}
 author: THeBusyBiscuit
 website: http://TheBusyBiscuit.github.io
 
+softdepend: [PlaceholderAPI]
+
 main: io.github.thebusybiscuit.rankprefixplus.RankPrefixPlus
 api-version: 1.13
 
