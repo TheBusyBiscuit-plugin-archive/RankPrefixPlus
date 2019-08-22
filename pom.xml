@@ -7,9 +7,9 @@
   <version>2.0</version>
   
   <properties>
-	<maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  <maven.compiler.source>1.8</maven.compiler.source>
+	  <maven.compiler.target>1.8</maven.compiler.target>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
   <repositories>
@@ -27,8 +27,8 @@
 		</repository>
 		<repository>
 			<id>placeholderapi-repo</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
+            		<url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        	</repository>
     	<repository>
 	    	<id>vault-repo</id>
 	    	<url>http://nexus.hc.to/content/repositories/pub_releases</url>
@@ -54,6 +54,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>config.yml</include>
                 </includes>
             </resource>
         </resources>
@@ -115,7 +116,7 @@
         <dependency>
 	        <groupId>com.github.thebusybiscuit</groupId>
 	        <artifactId>CS-CoreLib2</artifactId>
-	        <version>0.3.6</version>
+	        <version>0.3.7</version>
 	        <scope>compile</scope>
 	    </dependency>
         <dependency>
