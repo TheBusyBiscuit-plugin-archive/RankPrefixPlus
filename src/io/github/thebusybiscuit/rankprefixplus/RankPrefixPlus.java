@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,7 +25,6 @@ import io.github.thebusybiscuit.cscorelib2.updater.GitHubBuildsUpdater;
 import io.github.thebusybiscuit.cscorelib2.updater.Updater;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.clip.placeholderapi.metrics.bukkit.Metrics;
 
 public class RankPrefixPlus extends JavaPlugin {
 	
