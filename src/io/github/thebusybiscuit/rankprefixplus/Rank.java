@@ -1,6 +1,7 @@
 package io.github.thebusybiscuit.rankprefixplus;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 import lombok.Getter;
 
@@ -51,8 +52,8 @@ public class Rank {
 		
 		if (index < 0 || index > chars.length) {
 			this.scoreboardWeight = "A";
-			System.err.println("[RankPrefix+] Rank \"" + name + "\" has a TAB Priority higher than " + chars.length + " or smaller than 0");
-			System.out.println("This is not allowed and must be immediately fixed in the config.yml!");
+			RankPrefixPlus.getInstance().getLogger().log(Level.WARNING, "Rank \"" + name + "\" has a TAB Priority higher than " + chars.length + " or smaller than 0");
+			RankPrefixPlus.getInstance().getLogger().log(Level.WARNING, "This is not allowed and must be immediately fixed in the config.yml!");
 		}
 		else {
 			this.scoreboardWeight = String.valueOf(chars[index]);
